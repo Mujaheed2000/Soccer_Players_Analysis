@@ -1,0 +1,112 @@
+---
+title: "assignment2"
+author: "Mujaheed Abdulmalik"
+date: "2023-06-05"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+players <- read.csv(file="/Users/mujar/desktop/assignment/players.csv",header =T)
+```
+
+```{r}
+any(is.na(players$position_group))
+
+```
+```{r}
+library("dplyr")
+players$position_group = case_when(
+  players$Position == c( "Right Winger") ~ "F",
+  players$Position == c("Centre-Forward") ~ "F",
+  players$Position == c("Left Winger") ~ "F",
+  players$Position == c("Left Midfield") ~ "F",
+  players$Position == c("Right Midfield") ~ "F",
+  players$Position == c("Second Striker") ~ "F",
+  players$Position == c("Attacking Midfield") ~ "M",
+  players$Position == c("Central Midfield") ~ "M",
+  players$Position == c("Defensive Midfield") ~ "M",
+  players$Position == c("Centre-Back") ~ "D",
+  players$Position == c("Left-Back") ~ "D",
+  players$Position == c("Right-Back") ~ "D",
+  players$Position == "Goalkeeper" ~ "G", 
+  TRUE ~ "NA"
+)
+```
+
+
+
+
+```{r}
+#chart_t <- data.frame(players$position_group, players$GoalsnAssist,  players$Markey.Value.In.Millions...)
+
+#chart_t <- rename(chart_t, Value = players.Markey.Value.In.Millions... )
+
+```
+
+
+```{r}
+#players$GoalsnAssist <- players$Goals + players$Assists
+```
+
+```{r}
+#write.csv(players, file="/Users/mujar/desktop/assignment/players2.csv")
+```
+
+```{r}
+chart_t <- read.csv( file="/Users/mujar/desktop/assignment/grouped_p.csv", header = T)
+```
+
+
+```{r}
+chart_t$Position <- as.factor(chart_t$Position)
+
+```
+
+```{r}
+chart_age <- chart_t
+chart_age$age <- players$Age
+```
+
+
+
+
+```{r}
+ga <- chart_t$GnA
+v <- chart_t$Value
+p <-  chart_t$Position
+plot(ga,v, type = "n", xlab = "Goals and Assists", ylab = "Value in Millions", main = "Goals and Assists Against\nValue of Players by Position")
+points(ga[p=="F"],v[p=="F"],pch=19, col = "red")
+points(ga[p=="M"],v[p=="M"],pch=19, col = "yellow")
+points(ga[p=="D"],v[p=="D"],pch=19, col = "green")
+points(ga[p=="G"],v[p=="G"],pch=19, col = "black")
+legend("topleft",
+       legend = c("Forward", "Midfielder", "Defender", "Goalkeeper"), pch = c(19,19,19,19), col = c("red","yellow","green","black"))
+```
+
+
+
+```{r}
+# Library
+library(streamgraph)
+ 
+# Create data:
+data <- data.frame(
+  year=rep(seq(1990,2016) , each=10),
+  name=rep(letters[1:10] , 27),
+  value=sample( seq(0,1,0.0001) , 270)
+)
+ 
+# Stream graph with a legend
+pp <- streamgraph(data, key="name", value="value", date="year", height="300px", width="1000px") %>%
+  sg_legend(show=TRUE, label="names: ")
+  
+
+# save the widget
+# library(htmlwidgets)
+# saveWidget(pp, file=paste0( getwd(), "/HtmlWidget/streamgraphDropdown.html"))
+```
+
